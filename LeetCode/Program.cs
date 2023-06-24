@@ -1,4 +1,6 @@
-﻿namespace LeetCode
+﻿using System.Collections.Generic;
+
+namespace LeetCode
 {
     internal class Program
     {
@@ -9,18 +11,41 @@
 
         public int[] _0001_TwoSum(int[] nums, int target)
         {
-            for (int p1 = 0; p1 < nums.Length; p1++)
+            Dictionary<int, int> dic = new Dictionary<int, int>();
+
+            for (int i = 0; i < nums.Length; i++)
             {
-                int numberToFind = target - nums[p1];
-                for (int p2 = p1 + 1; p2 < nums.Length; p2++)
+                if (dic.ContainsKey(nums[i]))
+                    return new int[] { dic[nums[i]], i };
+                else
+                    dic[target - nums[i]] = i;
+            }
+
+            return new int[] { };
+        }
+
+        public int _0011_MaxArea(int[] height)
+        {
+            int left = 0, right = height.Length - 1;
+            int result = 0;
+
+            while (left < right)
+            {
+                var h = Math.Min(height[left], height[right]);
+                var w = right - left;
+                var area = h * w;
+                result = Math.Max(result, area);
+
+                if (height[left] <= height[right])
                 {
-                    if (nums[p2] == numberToFind)
-                    {
-                        return [p1, p2];
-                    }
+                    left++;
+                }
+                else
+                {
+                    right--;
                 }
             }
-            return null;
+            return result;
         }
 
     }
