@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace LeetCode
 {
@@ -24,28 +25,84 @@ namespace LeetCode
             return new int[] { };
         }
 
-        public int _0011_MaxArea(int[] height)
+        public int _0003_LengthOfLongestSubstring(string s)
         {
-            int left = 0, right = height.Length - 1;
-            int result = 0;
+            if (s.Length <= 1) return s.Length;
+
+            var seen = new Dictionary<char, int>();
+            int left = 0, longest = 0;
+
+            for (int right = 0; right < s.Length; right++)
+            {
+                char currentChar = s[right];
+                int previouslySeenChar;
+                if (seen.TryGetValue(currentChar, out previouslySeenChar) && previouslySeenChar >= left)
+                {
+                    left = previouslySeenChar + 1;
+                }
+
+                seen[currentChar] = right;
+
+                longest = Math.Max(longest, right - left + 1);
+            }
+
+            return longest;
+        }
+
+        public bool _0125_IsPalindrome(string s)
+        {
+            s = Regex.Replace(s, "[^A-Za-z0-9]", "").ToLower();
+
+            int left = 0;
+            int right = s.Length - 1;
 
             while (left < right)
             {
-                var h = Math.Min(height[left], height[right]);
-                var w = right - left;
-                var area = h * w;
-                result = Math.Max(result, area);
+                if (s[left] != s[right])
+                {
+                    return false;
+                }
 
-                if (height[left] <= height[right])
-                {
-                    left++;
-                }
-                else
-                {
-                    right--;
-                }
+                left++;
+                right--;
             }
-            return result;
+
+            return true;
+        }
+
+        public bool _0680_ValidPalindrome(string s)
+        {
+            int start = 0;
+            int end = s.Length - 1;
+
+            while (start < end)
+            {
+                if (s[start] != s[end])
+                {
+                    return ValidSubPalindrome(s, start + 1, end) || ValidSubPalindrome(s, start, end - 1);
+                }
+
+                start++;
+                end--;
+            }
+
+            return true;
+        }
+
+        public bool ValidSubPalindrome(string s, int start, int end)
+        {
+            while (start < end)
+            {
+                if (s[start] != s[end])
+                {
+                    return false;
+                }
+
+                start++;
+                end--;
+            }
+
+            return true;
         }
 
     }
