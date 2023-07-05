@@ -49,6 +49,39 @@ namespace LeetCode
             return longest;
         }
 
+        public bool _0020_IsValid(string s)
+        {
+            if (s.Length == 0) return true;
+
+            Dictionary<char, char> parens = new Dictionary<char, char>
+            {
+                {'(', ')'},
+                {'{', '}'},
+                {'[', ']'}
+            };
+
+            Stack<char> stack = new Stack<char>();
+
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (parens.ContainsKey(s[i]))
+                {
+                    stack.Push(s[i]);
+                }
+                else
+                {
+                    if (stack.Count == 0) return false;
+
+                    char leftBracket = stack.Pop();
+                    char correctBracket = parens[leftBracket];
+
+                    if (s[i] != correctBracket) return false;
+                }
+            }
+
+            return stack.Count == 0;
+        }
+
         public bool _0125_IsPalindrome(string s)
         {
             s = Regex.Replace(s, "[^A-Za-z0-9]", "").ToLower();
